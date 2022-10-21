@@ -21,10 +21,11 @@
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground"
   },
   "dependencies": {
+    "@datocms/cma-client-browser": "^1.1.8",
     "@nuxt/kit": "^3.0.0-rc.11",
     "datocms-listen": "^0.1.10",
     "vue": "^3.2.40",
-    "vue-datocms": "*"
+    "vue-datocms": "^3.0.0-0"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",

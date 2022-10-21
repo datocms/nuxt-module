@@ -1,35 +1,40 @@
 <template>
   <div>
-    <h1>Last 3 posts from the blog</h1>
-    <div v-if="pending">
-      Loading...
-    </div>
-    <div v-else style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 1rem;">
-      <div v-for="post in data.data.allBlogPosts">
-        <h2>{{ post.title }}</h2>
-        <DatocmsImage :data="post.coverImage.responsiveImage"/>
-        <DatocmsStructuredText :data="post.excerpt" />
-      </div>
-    </div>
+    <h1>Last {{ fetchData.blogPosts.length }} posts from the blog</h1>
+    <ClientOnly>
+      <QuerySubscrition />
+    </ClientOnly>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import { useFetch, useRuntimeConfig } from '#app'
+import { useRuntimeConfig, useFetch } from '#app'
 
-const config = useRuntimeConfig()
+import { useSiteSearch } from '#imports'
 
-const { data, pending, error, refresh } = await useFetch('https://graphql.datocms.com/', {
+const { state: siteSearchState, error: siteSearchError, data: siteSearchData } = useSiteSearch({
+  buildTriggerId: '7497',
+  // optional: by default fuzzy-search is not active
+  fuzzySearch: true,
+  // optional: you can omit it you only have one locale, or you want to find results in every locale
+  initialState: { locale: 'en' },
+  // optional: defaults to 8 search results per page
+  resultsPerPage: 10
+})
+
+const runtimeConfig = useRuntimeConfig()
+
+const { data: fetchData, pending: fetchPending, error: fetchError, refresh: fetchRefresh } = await useFetch('https://graphql.datocms.com/', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${config.datocms.datocmsReadOnlyToken}`
+    Authorization: `Bearer ${runtimeConfig.public.datocms.datocmsReadOnlyToken}`
   },
   body: JSON.stringify({
     query: `
       query RecentBlogPosts {
-        allBlogPosts(first: "3") {
+        blogPosts: allBlogPosts(first: "3") {
           title
           excerpt {
             value
@@ -52,7 +57,8 @@ const { data, pending, error, refresh } = await useFetch('https://graphql.datocm
         }
       }
     `
-  })
+  }),
+  transform: ({ data }) => data
 })
 
 </script>

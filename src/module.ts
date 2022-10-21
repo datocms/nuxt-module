@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { defineNuxtModule, addPlugin, addComponent } from '@nuxt/kit'
+import { defineNuxtModule, addPlugin, addComponent, addImports } from '@nuxt/kit'
 import { name, version } from '../package.json'
 
 export interface ModuleOptions {
@@ -21,6 +21,10 @@ export default defineNuxtModule<ModuleOptions>({
       throw new Error(`[${name}]: datocmsReadOnlyToken must be defined`)
     }
 
+    nuxt.options.runtimeConfig.public.datocms = {
+      datocmsReadOnlyToken
+    }
+
     addComponent({
       name: 'DatocmsImage', // name of the component to be used in vue templates
       export: 'Image', // (optional) if the component is a named (rather than default) export
@@ -37,12 +41,15 @@ export default defineNuxtModule<ModuleOptions>({
       filePath: 'vue-datocms' // resolve(runtimeDir, 'components', 'MyComponent.vue')
     })
 
-    nuxt.options.runtimeConfig.public.datocms = {
-      datocmsReadOnlyToken
-    }
-
     const runtimeDir = fileURLToPath(new URL('./runtime', import.meta.url))
+
     nuxt.options.build.transpile.push(runtimeDir)
+
+    addImports([
+      { name: 'useQuerySubscription', as: 'useQuerySubscription', from: resolve(runtimeDir, 'composables') },
+      { name: 'useSiteSearch', as: 'useSiteSearch', from: resolve(runtimeDir, 'composables') }
+    ])
+
     addPlugin(resolve(runtimeDir, 'plugin'))
   }
 })
