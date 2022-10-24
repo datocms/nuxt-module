@@ -1,8 +1,10 @@
 {
   "name": "@datocms/nuxt-module",
+  "description": "Nuxt module for working with DatoCMS",
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
+  "author": "Silvano Stralla <silvano@datocms.com>",
   "exports": {
     ".": {
       "import": "./dist/module.mjs",
@@ -34,5 +36,8 @@
     "@nuxtjs/eslint-config-typescript": "latest",
     "eslint": "latest",
     "nuxt": "^3.0.0-rc.11"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
