@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { defineNuxtModule, addPlugin, addComponent, addImports } from '@nuxt/kit'
+import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
 import { name, version } from '../package.json'
 
 export interface ModuleOptions {
@@ -49,7 +49,5 @@ export default defineNuxtModule<ModuleOptions>({
       { name: 'useQuerySubscription', as: 'useQuerySubscription', from: resolve(runtimeDir, 'composables') },
       { name: 'useSiteSearch', as: 'useSiteSearch', from: resolve(runtimeDir, 'composables') }
     ])
-
-    addPlugin(resolve(runtimeDir, 'plugin'))
   }
 })
