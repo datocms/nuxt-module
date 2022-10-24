@@ -47,7 +47,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     addImports([
       { name: 'useQuerySubscription', as: 'useQuerySubscription', from: resolve(runtimeDir, 'composables') },
-      { name: 'useSiteSearch', as: 'useSiteSearch', from: resolve(runtimeDir, 'composables') }
+      { name: 'useSiteSearch', as: 'useSiteSearch', from: resolve(runtimeDir, 'composables') },
+      { name: 'toHead', as: 'toHead', from: resolve(runtimeDir, 'lib') }
     ])
   }
 })
