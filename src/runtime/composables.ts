@@ -9,7 +9,8 @@ import {
 
 import { buildClient } from '@datocms/cma-client-browser'
 
-import { useRuntimeConfig } from '#app'
+import { useFetch, useRuntimeConfig } from '#app'
+import { toRef } from 'vue';
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -23,7 +24,7 @@ export function useSiteSearch<Client extends GenericClient> (
   const client =
     passedClient ||
     buildClient({
-      apiToken: runtimeConfig.public.datocms.datocmsReadOnlyToken
+      apiToken: runtimeConfig.public.datocms.token
     })
 
   return usePristineSiteSearch({ client, ...rest })
@@ -39,7 +40,7 @@ export function useQuerySubscription<
 
   const runtimeConfig = useRuntimeConfig()
 
-  const token = passedToken || runtimeConfig.public.datocms.datocmsReadOnlyToken
+  const token = passedToken || runtimeConfig.public.datocms.token
 
   const useQuerySubscriptionOptions = { token, ...rest } as QueryListenerOptions<
     QueryResult,
@@ -47,4 +48,39 @@ export function useQuerySubscription<
   >
 
   return usePristineQuerySubscription(useQuerySubscriptionOptions)
+}
+
+export async function useGraphqlQuery (
+  { query, variables = {}, preview = false }:
+  { query: any, variables?: Record<string, any>, preview?: boolean }
+) {
+  const runtimeConfig = useRuntimeConfig()
+
+  let endpoint = runtimeConfig.public.datocms.endpoint
+
+  if (runtimeConfig.public.datocms.environment) {
+    endpoint += `/environments/${runtimeConfig.public.datocms.environment}`
+  }
+
+  if (preview) {
+    endpoint += '/preview'
+  }
+
+  const { data, pending, error, refresh } = await useFetch<{ data?: any; errors?: any }>(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${runtimeConfig.public.datocms.token}`
+    },
+    body: {
+      query,
+      variables
+    },
+  })
+
+  if (data.value.errors) {
+    throw JSON.stringify(data.value.errors)
+  }
+
+  return { data: data.value.data, pending, error, refresh }
 }

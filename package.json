@@ -28,7 +28,7 @@
     "datocms-listen": "^0.1.10",
     "np": "^7.6.2",
     "vue": "^3.2.40",
-    "vue-datocms": "^3.0.0-0"
+    "vue-datocms": "^3.0.0"
   },
   "devDependencies": {
     "@nuxt/module-builder": "latest",

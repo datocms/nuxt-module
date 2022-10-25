@@ -4,7 +4,9 @@ import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
 import { name, version } from '../package.json'
 
 export interface ModuleOptions {
-  datocmsReadOnlyToken: string;
+  token: string;
+  environment: string;
+  endpoint: string;
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -14,15 +16,19 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'datocms'
   },
   defaults: {
-    datocmsReadOnlyToken: undefined
+    token: process.env.NUXT_ENV_DATOCMS_API_TOKEN,
+    environment: process.env.NUXT_ENV_DATOCMS_ENVIRONMENT,
+    endpoint: 'https://graphql.datocms.com'
   },
-  setup ({ datocmsReadOnlyToken }, nuxt) {
-    if (!datocmsReadOnlyToken) {
-      throw new Error(`[${name}]: datocmsReadOnlyToken must be defined`)
+  setup ({ token, environment, endpoint }, nuxt) {
+    if (!token) {
+      throw new Error(`[${name}]: token must be defined`)
     }
 
     nuxt.options.runtimeConfig.public.datocms = {
-      datocmsReadOnlyToken
+      token,
+      environment,
+      endpoint
     }
 
     addComponent({
@@ -48,6 +54,7 @@ export default defineNuxtModule<ModuleOptions>({
     addImports([
       { name: 'useQuerySubscription', as: 'useQuerySubscription', from: resolve(runtimeDir, 'composables') },
       { name: 'useSiteSearch', as: 'useSiteSearch', from: resolve(runtimeDir, 'composables') },
+      { name: 'useGraphqlQuery', as: 'useGraphqlQuery', from: resolve(runtimeDir, 'composables') },
       { name: 'toHead', as: 'toHead', from: resolve(runtimeDir, 'lib') }
     ])
   }

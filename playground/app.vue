@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <h1>Last {{ fetchData.blogPosts.length }} posts from the blog</h1>
+  <div v-if="!fetchError">
+    <SiteSearch />
+    <h1>Last 3 posts from the {{ fetchData.blogPostMeta.count }} published on the blog</h1>
     <ClientOnly>
       <QuerySubscrition />
     </ClientOnly>
@@ -9,56 +10,16 @@
 
 <script setup lang="ts">
 
-import { useRuntimeConfig, useFetch } from '#app'
+import { useGraphqlQuery } from '#imports'
 
-import { useSiteSearch } from '#imports'
-
-const { state: siteSearchState, error: siteSearchError, data: siteSearchData } = useSiteSearch({
-  buildTriggerId: '7497',
-  // optional: by default fuzzy-search is not active
-  fuzzySearch: true,
-  // optional: you can omit it you only have one locale, or you want to find results in every locale
-  initialState: { locale: 'en' },
-  // optional: defaults to 8 search results per page
-  resultsPerPage: 10
-})
-
-const runtimeConfig = useRuntimeConfig()
-
-const { data: fetchData, pending: fetchPending, error: fetchError, refresh: fetchRefresh } = await useFetch('https://graphql.datocms.com/', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${runtimeConfig.public.datocms.datocmsReadOnlyToken}`
-  },
-  body: JSON.stringify({
-    query: `
-      query RecentBlogPosts {
-        blogPosts: allBlogPosts(first: "3") {
-          title
-          excerpt {
-            value
-          }
-          coverImage {
-            responsiveImage {
-              alt
-              aspectRatio
-              base64
-              bgColor
-              height
-              sizes
-              src
-              srcSet
-              title
-              webpSrcSet
-              width
-            }
-          }
-        }
+const { data: fetchData, pending: fetchPending, error: fetchError, refresh: fetchRefresh } = await useGraphqlQuery({
+  query: `
+    query {
+      blogPostMeta: _allBlogPostsMeta {
+        count
       }
-    `
-  }),
-  transform: ({ data }) => data
+    }
+  `
 })
 
 </script>
