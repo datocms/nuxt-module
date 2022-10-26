@@ -71,7 +71,17 @@ export default {
 ### token
 
 - Type: `String`
-- Default: `robots.config`
+- Default: `process.env.NUXT_ENV_DATOCMS_API_TOKEN`
+
+### environment
+
+- Type: `String`
+- Default: `process.env.NUXT_ENV_DATOCMS_ENVIRONMENT`
+
+### endpoint
+
+- Type: `String`
+- Default: `https://graphql.datocms.com`
 
 ## Development
 
