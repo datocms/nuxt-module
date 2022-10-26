@@ -10,7 +10,7 @@ import {
 import { buildClient } from '@datocms/cma-client-browser'
 
 import { useFetch, useRuntimeConfig } from '#app'
-import { toRef } from 'vue';
+import { ref } from 'vue';
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -66,7 +66,9 @@ export async function useGraphqlQuery (
     endpoint += '/preview'
   }
 
-  const { data, pending, error, refresh } = await useFetch<{ data?: any; errors?: any }>(endpoint, {
+  const data = ref<any>(null)
+
+  const { data: fetchedData, pending, error, refresh } = await useFetch<{ data?: any; errors?: any }>(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -78,9 +80,11 @@ export async function useGraphqlQuery (
     },
   })
 
-  if (data.value.errors) {
-    throw JSON.stringify(data.value.errors)
+  if (fetchedData.value.errors) {
+    throw JSON.stringify(fetchedData.value.errors)
   }
 
-  return { data: data.value.data, pending, error, refresh }
+  data.value = fetchedData.value.data
+
+  return { data, pending, error, refresh }
 }
