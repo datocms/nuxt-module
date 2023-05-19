@@ -26,7 +26,7 @@
     "@datocms/cma-client-browser": "^1.1.8",
     "@nuxt/kit": "^3.0.0-rc.11",
     "datocms-listen": "^0.1.10",
-    "np": "^7.6.2",
+    "np": "^7.7.0",
     "vue": "^3.2.40",
     "vue-datocms": "^4.0.0"
   },
