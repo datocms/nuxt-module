@@ -60,8 +60,10 @@ export default {
   modules: [
     '@datocms/nuxt-module'
   ],
+  /* DatoCMS module options */
   datocms: {
-    /* module options */
+    /* The token is mandatory: you find the token in the settings of your DatoCMS project */
+    datocmsReadOnlyToken: 'YOUR TOKEN',
   }
 }
 ```
