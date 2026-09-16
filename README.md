@@ -73,7 +73,7 @@ export default {
   /* DatoCMS module options */
   datocms: {
     /* The token is mandatory: you find the token in the settings of your DatoCMS project */
-    datocmsReadOnlyToken: 'YOUR TOKEN',
+    token: 'YOUR TOKEN',
   }
 }
 ```
@@ -84,6 +84,8 @@ export default {
 
 - Type: `String`
 - Default: `process.env.NUXT_ENV_DATOCMS_API_TOKEN`
+
+The token is exposed as `runtimeConfig.public.datocms.token`, so it can also be provided (or overridden) at runtime through the `NUXT_PUBLIC_DATOCMS_TOKEN` environment variable. If no token is available at build time the module logs a warning instead of failing the build.
 
 ### environment
 
@@ -97,8 +99,15 @@ export default {
 
 ## Development
 
+Requires Node.js 22.19+ (or 24.11+).
+
 - Run `npm run dev:prepare` to generate type stubs.
 - Use `npm run dev` to start [playground](./playground) in development mode.
+- Use `npm run build` to build the playground for production.
+
+### Deploying the playground to Vercel
+
+The repository is ready to be deployed to Vercel as-is: import it with the repository root as the project root and Vercel will run `npm run build` (see [`vercel.json`](./vercel.json)). Nitro detects the Vercel environment and emits the [Build Output](https://vercel.com/docs/build-output-api) bundle in `.vercel/output` at the repository root.
 
 ## License
 

@@ -56,7 +56,7 @@ const query = `
   }
 `
 
-const { status: querySubscriptionStatus, error: querySubscriptionError, data: querySubscriptionData } = useQuerySubscription({
+const { data: querySubscriptionData } = useQuerySubscription({
   enabled: true,
   query,
   variables: { first: 3 }

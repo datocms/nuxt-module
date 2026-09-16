@@ -1,6 +1,6 @@
-import { resolve } from 'path'
-import { fileURLToPath } from 'url'
-import { defineNuxtModule, addComponent, addImports } from '@nuxt/kit'
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineNuxtModule, addComponent, addImports, useLogger } from '@nuxt/kit'
 import { name, version } from '../package.json'
 
 export interface ModuleOptions {
@@ -22,7 +22,9 @@ export default defineNuxtModule<ModuleOptions>({
   },
   setup ({ token, environment, endpoint }, nuxt) {
     if (!token) {
-      throw new Error(`[${name}]: token must be defined`)
+      // Don't fail the build: the token can still be provided at runtime via
+      // the `NUXT_PUBLIC_DATOCMS_TOKEN` environment variable.
+      useLogger(name).warn('`datocms.token` is not set. Provide it in `nuxt.config` or via `NUXT_PUBLIC_DATOCMS_TOKEN`.')
     }
 
     nuxt.options.runtimeConfig.public.datocms = {

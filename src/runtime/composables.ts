@@ -1,8 +1,10 @@
-import {
+import type {
   UseSiteSearchConfig,
   UseSiteSearchResult,
   QueryListenerOptions,
-  GenericClient,
+  GenericClient
+} from 'vue-datocms'
+import {
   useSiteSearch as usePristineSiteSearch,
   useQuerySubscription as usePristineQuerySubscription
 } from 'vue-datocms'
@@ -10,7 +12,7 @@ import {
 import { buildClient } from '@datocms/cma-client-browser'
 
 import { useFetch, useRuntimeConfig } from '#app'
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
@@ -77,14 +79,14 @@ export async function useGraphqlQuery (
     body: {
       query,
       variables
-    },
+    }
   })
 
-  if (fetchedData.value.errors) {
+  if (fetchedData.value?.errors) {
     throw JSON.stringify(fetchedData.value.errors)
   }
 
-  data.value = fetchedData.value.data
+  data.value = fetchedData.value?.data ?? null
 
   return { data, pending, error, refresh }
 }

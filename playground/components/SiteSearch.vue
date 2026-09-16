@@ -2,7 +2,7 @@
 
 import { useSiteSearch } from '#imports'
 
-const { state, error, data } = useSiteSearch({
+const { state, data } = useSiteSearch({
   buildTriggerId: '7497',
   // optional: by default fuzzy-search is not active
   fuzzySearch: true,
