@@ -27,9 +27,12 @@ export default defineNuxtModule<ModuleOptions>({
       useLogger(name).warn('`datocms.token` is not set. Provide it in `nuxt.config` or via `NUXT_PUBLIC_DATOCMS_TOKEN`.')
     }
 
+    // Keys must exist (not be `undefined`) to survive serialization into the
+    // server bundle, otherwise the `NUXT_PUBLIC_DATOCMS_*` runtime env
+    // overrides have nothing to attach to.
     nuxt.options.runtimeConfig.public.datocms = {
-      token,
-      environment,
+      token: token ?? '',
+      environment: environment ?? '',
       endpoint
     }
 

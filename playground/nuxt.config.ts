@@ -14,9 +14,8 @@ export default defineNuxtConfig({
     '../src/module'
   ],
 
-  datocms: {
-    token: 'faeb9172e232a75339242faafb9e56de8c8f13b735f7090964'
-  },
+  // The DatoCMS token is not committed: provide it through the
+  // `NUXT_PUBLIC_DATOCMS_TOKEN` environment variable (see `.env.example`).
 
   nitro: isVercel
     ? { output: { dir: fileURLToPath(new URL('../.vercel/output', import.meta.url)) } }
