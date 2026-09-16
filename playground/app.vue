@@ -12,7 +12,7 @@
 
 import { useGraphqlQuery } from '#imports'
 
-const { data: fetchData, pending: fetchPending, error: fetchError, refresh: fetchRefresh } = await useGraphqlQuery({
+const { data: fetchData, error: fetchError } = await useGraphqlQuery({
   query: `
     query {
       blogPostMeta: _allBlogPostsMeta {

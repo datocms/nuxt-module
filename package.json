@@ -7,35 +7,40 @@
   "author": "Silvano Stralla <silvano@datocms.com>",
   "exports": {
     ".": {
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": "^22.19.0 || ^24.11.0 || >=26.0.0"
+  },
   "scripts": {
-    "prepack": "nuxt-module-build",
-    "dev": "nuxi dev playground",
-    "dev:build": "nuxi build playground",
-    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground"
+    "prepack": "nuxt-module-build build",
+    "build": "nuxt build playground",
+    "dev": "nuxt dev playground",
+    "dev:build": "nuxt build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@datocms/cma-client-browser": "^1.1.8",
-    "@nuxt/kit": "^3.0.0-rc.11",
-    "datocms-listen": "^0.1.10",
-    "np": "^7.7.0",
-    "vue": "^3.2.40",
-    "vue-datocms": "^4.0.0"
+    "@datocms/cma-client-browser": "^6.1.0",
+    "@nuxt/kit": "^4.5.2",
+    "vue-datocms": "^8.1.19"
   },
   "devDependencies": {
-    "@nuxt/module-builder": "latest",
-    "@nuxt/schema": "^3.0.0-rc.11",
-    "@nuxtjs/eslint-config-typescript": "latest",
-    "eslint": "latest",
-    "nuxt": "^3.0.0-rc.11"
+    "@nuxt/eslint-config": "^1.17.0",
+    "@nuxt/module-builder": "^1.0.3",
+    "@nuxt/schema": "^4.5.2",
+    "eslint": "^10.0.0",
+    "np": "^10.0.0",
+    "nuxt": "^4.5.2",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.42"
   },
   "publishConfig": {
     "access": "public"
